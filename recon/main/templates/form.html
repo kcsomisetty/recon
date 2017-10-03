@@ -1,0 +1,96 @@
+<html>
+
+<style>
+
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+	function startCompare() {
+		if ($("#id_file1").val().length <=0 || $("#id_file2").val().length <=0) {
+			alert("Please select 2 files to compare")
+			return
+			}
+			
+		document.getElementById("output").innerHTML = "Uploading...."
+		document.getElementById("reconform").submit();
+		
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState == XMLHttpRequest.DONE ) {
+			   if (xmlhttp.status == 200) {
+				   document.getElementById("output").innerHTML = xmlhttp.responseText;
+			   }
+			   else {
+				   document.getElementById("output").innerHTML = xmlhttp.responseText
+			   }
+			}
+		}
+		
+		document.getElementById("output").innerHTML = "Processing...."
+		
+		var filedsToIgnore =  ""
+		$('#filedsToIgnore option:selected').each(function(i, selected){
+			if (filedsToIgnore.length <= 0)
+				filedsToIgnore = $(selected).attr('value');
+			else
+				filedsToIgnore = filedsToIgnore + "," + $(selected).attr('value');
+		});
+		
+		xmlhttp.open("GET", "/compare?file1=" + document.getElementById("id_file1").files.item(0).name + "&file2=" + document.getElementById("id_file2").files.item(0).name + "&filedsToIgnore=" + filedsToIgnore, true);
+		xmlhttp.send();
+	}
+	
+	function showUnmatched() {
+		$(".results").toggle();
+	}
+	
+	
+</script>
+
+<body>
+	<h1 align="center">Payments Reconciliation system</h1>
+	<p>&nbsp;</p>
+		<form id="reconform" action="" method="post" enctype="multipart/form-data"> 
+			<table align="center"> <tr>
+				<td>	
+					<table align="center">
+						<tr>
+							<td>File 1:</td>
+							<td><input type="file" name="file1" required id="id_file1" /></td>
+						</tr>
+						<tr><p>&nbsp;</p></tr>
+						<tr>
+							<td>File 2:</td>
+							<td><input type="file" name="file2" required id="id_file2"/></td>
+						</tr>
+					</table>
+				</td>
+					<!-- TODO: list should be dynamically loaded -->
+				<td>
+					<table align="center">
+						<tr><td>
+								Fields to ignore<p>
+								<select id="filedsToIgnore" multiple="mutliple">
+								  <option value="TransactionDate">Transaction Date</option>
+								  <option value="TransactionAmount">Transaction Amount</option>
+								  <option value="TransactionNarrative">Transaction Narrative</option>
+								  <option value="TransactionDescription">Transaction Description</option>
+								  <option value="WalletReference">Wallet Reference</option>
+								</select>	
+						</tr></td>			
+					</table>
+				</td></tr>
+			</table>
+		</form>
+		
+		<table align="center"><tr><td align="center"><button onclick="startCompare()">Compare</button> </td></tr></table>
+
+	<p>&nbsp;</p>
+	<hr />
+		
+	<div id="output" align="center">
+	</div>
+
+</body>
+</html>

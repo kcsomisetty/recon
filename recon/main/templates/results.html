@@ -1,0 +1,119 @@
+<p>
+	<table align="center" class="summary">
+		<tr>
+			<th>
+				{{ file1_name }}
+			</th>
+			<th>
+				{{ file2_name }}
+			</th>
+		</tr>
+		<tr>
+			<td>
+				<table class="summary" border="border">
+					<tr>
+						<tr> <td>Total Records : </td> <td>{{file1_total}} </td> </tr>
+						<tr> <td>Matched : </td> <td>{{file1_exactmatches}}</td>  </tr>
+						<tr> <td>Partially matched : </td> <td>{{partialmatches}}</td> </tr>
+						<tr> <td>Not matched : </td> <td>{{file1_unmatched}}</td>  </tr>
+						<tr> <td>Duplicates : </td> <td>{{file1_duplicates}}</td>  </tr>
+					</tr>
+				</table>
+			</td>
+			<td>
+				<table class="summary" border="border">
+					<tr>
+						<tr> <td>Total Records : </td> <td>{{file2_total}} </td> </tr>
+						<tr> <td>Matched : </td> <td>{{file2_exactmatches}}</td>  </tr>
+						<tr> <td>Partially matched : </td> <td>{{partialmatches}}</td> </tr>
+						<tr> <td>Not matched : </td> <td>{{file2_unmatched}}</td>  </tr>
+						<tr> <td>Duplicates : </td> <td>{{file2_duplicates}}</td>  </tr>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	<br/>
+	<p  align="center"><button onclick="showUnmatched()">Unmatched Records</button></p>
+	<hr>
+	<table  align="center">
+		<tr>
+			<td>
+				<table class="results" style="display:none">
+					<tr><th> {{ file1_name }} -- Unmatched</th></tr>
+					<tr>
+						<td>
+							<table  border="border"class="results"  style="display:none"> 
+								{% for entry in file1_unmatchedList %}
+									<tr>
+										<td>{{ entry.getTransactionID }} </td>
+										<td>{{ entry.getDate }}</td>
+										<td>{{ entry.getReference }}</td>
+										<td>{{ entry.getAmount }}</td>
+									</tr>
+								{% endfor %}
+							</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+			<td>
+				<table  class="results" style="display:none">
+					<tr><th>{{ file2_name }} -- Unmatched</th></tr>
+					<tr>
+						<td>
+								<table  border="border"class="results"  style="display:none"> 
+									{% for entry in file2_unmatchedList %}
+											<tr>
+												<td>{{ entry.getTransactionID }} </td>
+												<td>{{ entry.getDate }}</td>
+												<td>{{ entry.getReference }}</td>
+												<td>{{ entry.getAmount }}</td>
+											</tr>
+									{% endfor %}
+								</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	<br>
+	<table  class="results" style="display:none">
+		<tr>
+			<th>{{ file1_name }} - Partial Matches</th>
+			<th>{{ file2_name }} - Partial Matches</th>
+		</tr>
+		<tr>
+			<td>
+				<table  border="border" class="results"  style="display:none"> 
+					{% for entry in partialmatchesList1 %}
+						<tr>
+							<td>{{ entry.getTransactionID }} </td>
+							<td>{{ entry.getDate }}</td>
+							<td>{{ entry.getReference }}</td>
+							<td>{{ entry.getAmount }}</td>
+						</tr>
+					{% endfor %}
+				</table>
+			</td>
+			<td>
+				<table  border="border" class="results"  style="display:none"> 
+					{% for entry in partialmatchesList2 %}
+						<tr>
+							<td>{{ entry.getTransactionID }} </td>
+							<td>{{ entry.getDate }}</td>
+							<td>{{ entry.getReference }}</td>
+							<td>{{ entry.getAmount }}</td>
+						</tr>
+					{% endfor %}
+				</table>
+			</td>
+		</tr>
+	</table>
+</p>
+
+<hr/>
+{% if totalTime > 0 %}
+	Time taken : {{totalTime}}
+{% endif%}
